@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { styled } from '@mui/system';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import QueryProvider from '../Context/QueryProvider';
+import QueryContext from '../Context/QueryContext';
 
 const StyledSearchBar = styled('div')({
   display: 'flex',
@@ -10,7 +12,7 @@ const StyledSearchBar = styled('div')({
   borderRadius: 8, // Adjust the value for your desired border radius
   padding: '8px',
   color: 'silver',
-  flexGrow: '1',
+  // flexGrow: '1',
   width: '100%',
   backgroundColor: '#FFFFFF',
   border: '1px solid rgba(0, 0, 0, 0.1)',
@@ -31,24 +33,27 @@ function Query({ placeholder, sendQuery }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [data, changeData] = useState('');
+  // Query State
+  const [query, setQuery, initialData] = useContext(QueryContext)
+  const [data, setData] = useState(initialData)
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(location.pathname !== '/search') {
+    if (location.pathname !== '/search') {
       navigate('/search')
     }
-    sendQuery(data);
+    setQuery(data)
+    initialData = data
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} style={{ flexGrow: '1' }}>
       <StyledSearchBar>
         <StyledInput
           placeholder={placeholder}
           inputProps={{ 'aria-label': 'search' }}
           value={data}
-          onChange={e => changeData(e.target.value)}
+          onChange={e => setData(e.target.value)}
         />
         <SearchIcon />
       </StyledSearchBar>

@@ -4,13 +4,9 @@ import QueryContext from './QueryContext'
 const QueryProvider = ({ children }) => {
     const [query, setQuery] = useState('')
 
-    const changeQuery = (data) => {
-        setQuery(data)
-    }
-
   return (
     <div>
-      <QueryContext.Provider value = {{ query, changeQuery}}>
+      <QueryContext.Provider value = {[ query, setQuery]}>
         {children}
       </QueryContext.Provider>
     </div>
